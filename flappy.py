@@ -66,7 +66,7 @@ class Pipe(pygame.sprite.Sprite):
 
         self. image = pygame.image.load('assets/sprites/pipe-green.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (PIPE_WIDHT, PIPE_HEIGHT))
-
+        
 
         self.rect = self.image.get_rect()
         self.rect[0] = xpos
@@ -79,7 +79,7 @@ class Pipe(pygame.sprite.Sprite):
 
 
         self.mask = pygame.mask.from_surface(self.image)
-
+        self.passed = False
 
     def update(self):
         self.rect[0] -= GAME_SPEED
@@ -118,6 +118,18 @@ pygame.display.set_caption('Flappy Bird')
 BACKGROUND = pygame.image.load('assets/sprites/background-day.png')
 BACKGROUND = pygame.transform.scale(BACKGROUND, (SCREEN_WIDHT, SCREEN_HEIGHT))
 BEGIN_IMAGE = pygame.image.load('assets/sprites/message.png').convert_alpha()
+NUMBER_IMAGES = {
+    '0': pygame.image.load('assets/sprites/0.png').convert_alpha(),
+    '1': pygame.image.load('assets/sprites/1.png').convert_alpha(),
+    '2': pygame.image.load('assets/sprites/2.png').convert_alpha(),
+    '3': pygame.image.load('assets/sprites/3.png').convert_alpha(),
+    '4': pygame.image.load('assets/sprites/4.png').convert_alpha(),
+    '5': pygame.image.load('assets/sprites/5.png').convert_alpha(),
+    '6': pygame.image.load('assets/sprites/6.png').convert_alpha(),
+    '7': pygame.image.load('assets/sprites/7.png').convert_alpha(),
+    '8': pygame.image.load('assets/sprites/8.png').convert_alpha(),
+    '9': pygame.image.load('assets/sprites/9.png').convert_alpha()
+}
 
 bird_group = pygame.sprite.Group()
 bird = Bird()
@@ -143,6 +155,8 @@ def reset_game():
     global ground_group
     global begin
     global game_over
+    global score
+    score = 0
 
     # NEW BIRD
     bird_group = pygame.sprite.Group()
@@ -227,6 +241,11 @@ while True:
                         pygame.mixer.music.play()
 
         screen.blit(BACKGROUND, (0, 0))
+        score_string = str(score)
+        x_pos = 150
+        for digit in score_string:
+            screen.blit(NUMBER_IMAGES[digit], (x_pos, 50))
+            x_pos += NUMBER_IMAGES[digit].get_width()
         
         if not game_over: 
 
@@ -248,6 +267,12 @@ while True:
             bird_group.update()
             ground_group.update()
             pipe_group.update()
+
+            for pipe in pipe_group:
+                if pipe.rect[1] > 0:
+                    if pipe.rect.right < bird.rect.left and not pipe.passed:
+                        score += 1
+                        pipe.passed = True
 
         bird_group.draw(screen)
         pipe_group.draw(screen)
