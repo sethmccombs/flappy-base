@@ -1,16 +1,21 @@
-# Flappy-bird-python
-A basic Flappy Bird game made in Python
+# FlappyBase (Flappy Bird + Database)
 
-I took the assets from https://github.com/zhaolingzhi/FlapPyBird-master | Credits to him
+idk it's cursed
 
-## Current State:
-![Screenshot](https://github.com/LeonMarqs/Flappy-bird-python/blob/master/Screenshot_1.png)
+Based on:
 
-## Dependence:
-* pygame
+- OG assets - [https://github.com/zhaolingzhi/FlapPyBird-master](https://github.com/zhaolingzhi/FlapPyBird-master)
 
-## Contribution
-It's a simple model, so I'd be very grateful if you could help me to improve the game.
+- Forked from - [https://github.com/zhaolingzhi/FlapPyBird-master](https://github.com/zhaolingzhi/FlapPyBird-master)
 
+![Screenshot](screenshot.png)
 
+## Dependencies
 
+* `pygame` (`pip3 install pygame`)
+
+## Running
+
+```sh
+❯ python3 flappy.py
+```
