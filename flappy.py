@@ -27,9 +27,9 @@ class Bird(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
 
-        self.images =  [pygame.image.load('assets/sprites/bluebird-upflap.png').convert_alpha(),
-                        pygame.image.load('assets/sprites/bluebird-midflap.png').convert_alpha(),
-                        pygame.image.load('assets/sprites/bluebird-downflap.png').convert_alpha()]
+        self.images =  [pygame.image.load('assets/sprites/gb-logo.png').convert_alpha(),
+                        pygame.image.load('assets/sprites/gb-logo.png').convert_alpha(),
+                        pygame.image.load('assets/sprites/gb-logo.png').convert_alpha()]
 
         self.speed = SPEED
 
@@ -172,6 +172,8 @@ while begin:
 
     pygame.display.update()
 
+    font = pygame.font.SysFont('Arial', 48)
+    game_over = False
 
 while True:
 
@@ -187,36 +189,58 @@ while True:
                 pygame.mixer.music.play()
 
     screen.blit(BACKGROUND, (0, 0))
+    
+    if not game_over: 
 
-    if is_off_screen(ground_group.sprites()[0]):
-        ground_group.remove(ground_group.sprites()[0])
+        if is_off_screen(ground_group.sprites()[0]):
+            ground_group.remove(ground_group.sprites()[0])
 
-        new_ground = Ground(GROUND_WIDHT - 20)
-        ground_group.add(new_ground)
+            new_ground = Ground(GROUND_WIDHT - 20)
+            ground_group.add(new_ground)
 
-    if is_off_screen(pipe_group.sprites()[0]):
-        pipe_group.remove(pipe_group.sprites()[0])
-        pipe_group.remove(pipe_group.sprites()[0])
+        if is_off_screen(pipe_group.sprites()[0]):
+            pipe_group.remove(pipe_group.sprites()[0])
+            pipe_group.remove(pipe_group.sprites()[0])
 
-        pipes = get_random_pipes(SCREEN_WIDHT * 2)
+            pipes = get_random_pipes(SCREEN_WIDHT * 2)
 
-        pipe_group.add(pipes[0])
-        pipe_group.add(pipes[1])
+            pipe_group.add(pipes[0])
+            pipe_group.add(pipes[1])
 
-    bird_group.update()
-    ground_group.update()
-    pipe_group.update()
+        bird_group.update()
+        ground_group.update()
+        pipe_group.update()
 
-    bird_group.draw(screen)
-    pipe_group.draw(screen)
-    ground_group.draw(screen)
+        bird_group.draw(screen)
+        pipe_group.draw(screen)
+        ground_group.draw(screen)
+
+
+    if not game_over:
+        if (
+            pygame.sprite.groupcollide(
+                bird_group,
+                ground_group,
+                False,
+                False,
+                pygame.sprite.collide_mask
+            )
+            or
+            pygame.sprite.groupcollide(
+                bird_group,
+                pipe_group,
+                False,
+                False,
+                pygame.sprite.collide_mask
+            )
+        ):
+            pygame.mixer.music.load(hit)
+            pygame.mixer.music.play()
+            game_over = True
+
+    # DRAW GAME OVER TEXT
+    if game_over:
+        text = font.render("AW BEANS", True, (255, 0, 0))
+        screen.blit(text, (90, 250))
 
     pygame.display.update()
-
-    if (pygame.sprite.groupcollide(bird_group, ground_group, False, False, pygame.sprite.collide_mask) or
-            pygame.sprite.groupcollide(bird_group, pipe_group, False, False, pygame.sprite.collide_mask)):
-        pygame.mixer.music.load(hit)
-        pygame.mixer.music.play()
-        time.sleep(1)
-        break
-
