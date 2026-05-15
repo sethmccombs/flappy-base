@@ -303,7 +303,7 @@ while True:
 
         # DRAW GAME OVER TEXT
         if game_over:
-            text = font.render("AW BEANS", True, (255, 0, 0))
+            text = font.render("AWWWWW BEANS", True, (255, 0, 0))
             screen.blit(text, (90, 250))
 
         pygame.display.update()
